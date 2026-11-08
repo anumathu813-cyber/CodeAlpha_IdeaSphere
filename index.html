@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaSphere | Student Innovation Community</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+    <a href="#home" class="logo">Idea<span>Sphere</span></a>
+
+    <nav class="nav-links">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#ideas" class="nav-link">Explore Ideas</a>
+        <a href="#share" class="nav-link">Share an Idea</a>
+    </nav>
+
+    <div class="nav-right">
+        <span id="liveStatus" class="live-status">● Connecting...</span>
+        <button id="loginOpen" class="nav-button">Login</button>
+        <button id="logoutButton" class="nav-button hidden">Logout</button>
+    </div>
+</header>
+
+<main>
+    <!-- HOME -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">THE STUDENT INNOVATION COMMUNITY</span>
+            <h1>Great Ideas<br>Start With You.</h1>
+            <p>
+                Connect with students from different colleges,
+                discover creative projects, share your ideas and
+                turn your imagination into innovation.
+            </p>
+            <div class="hero-actions">
+                <a href="#share" class="button button-primary">Share Your Idea</a>
+                <a href="#ideas" class="button button-outline">Explore Ideas</a>
+            </div>
+            <div class="hero-note">
+                <span class="status-dot"></span>
+                <span>Connect. Create. Innovate.</span>
+            </div>
+        </div>
+
+        <div class="hero-art">
+            <div class="art-circle">
+                <div class="art-card">
+                    <span class="art-icon">💡</span>
+                    <h3>Think Different</h3>
+                    <p>Ideas create possibilities.</p>
+                </div>
+                <div class="floating-icon icon-one">🚀</div>
+                <div class="floating-icon icon-two">✨</div>
+                <div class="floating-icon icon-three">🎓</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="feature-card">
+            <span>🌍</span>
+            <h3>Connect Colleges</h3>
+            <p>Meet students and innovators from different colleges.</p>
+        </div>
+        <div class="feature-card">
+            <span>💡</span>
+            <h3>Share Ideas</h3>
+            <p>Present your innovative concepts to the community.</p>
+        </div>
+        <div class="feature-card">
+            <span>🤝</span>
+            <h3>Collaborate</h3>
+            <p>Discover ideas and interact with other students.</p>
+        </div>
+    </section>
+
+    <!-- EXPLORE IDEAS -->
+    <section id="ideas" class="section">
+        <div class="section-heading">
+            <span class="eyebrow">DISCOVER INNOVATION</span>
+            <h2>Explore Ideas</h2>
+            <p>Discover creative projects shared by students.</p>
+        </div>
+
+        <div class="feed-toolbar">
+            <input type="search" id="searchIdeas"
+                   placeholder="Search ideas by title or category...">
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option>Artificial Intelligence</option>
+                <option>Web Development</option>
+                <option>Mobile App Development</option>
+                <option>Cybersecurity</option>
+                <option>Internet of Things (IoT)</option>
+                <option>Robotics & Automation</option>
+                <option>Data Science</option>
+                <option>Smart Agriculture</option>
+                <option>Healthcare & Medical Technology</option>
+                <option>Environment & Sustainability</option>
+                <option>Education Technology</option>
+                <option>Women Safety</option>
+                <option>Smart Cities</option>
+            </select>
+        </div>
+
+        <div id="ideasFeed" class="ideas-grid">
+            <p class="loading-message">Loading ideas...</p>
+        </div>
+    </section>
+
+    <!-- SHARE IDEA -->
+    <section id="share" class="section share-section">
+        <div class="section-heading">
+            <span class="eyebrow">YOUR IDEA MATTERS</span>
+            <h2>Share an Idea</h2>
+            <p>Have an innovative thought? Share it with students.</p>
+        </div>
+
+        <div class="share-layout">
+            <div class="share-info">
+                <h3>Every great innovation begins with an idea.</h3>
+                <p>
+                    Share your project concept, get feedback and
+                    connect with students who are interested in innovation.
+                </p>
+                <div class="share-tip">💡 Be creative. Be clear. Make an impact.</div>
+            </div>
+
+            <form id="ideaForm" class="idea-form">
+                <label for="title">Idea Title</label>
+                <input type="text" id="title" name="title"
+                       placeholder="Enter your idea title" required>
+
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="">Select a category</option>
+                    <option>Artificial Intelligence</option>
+                    <option>Web Development</option>
+                    <option>Mobile App Development</option>
+                    <option>Cybersecurity</option>
+                    <option>Internet of Things (IoT)</option>
+                    <option>Robotics & Automation</option>
+                    <option>Data Science</option>
+                    <option>Smart Agriculture</option>
+                    <option>Healthcare & Medical Technology</option>
+                    <option>Environment & Sustainability</option>
+                    <option>Education Technology</option>
+                    <option>Women Safety</option>
+                    <option>Smart Cities</option>
+                </select>
+
+                <label for="description">Idea Description</label>
+                <textarea id="description" name="description"
+                          rows="6" placeholder="Explain your idea..."
+                          required></textarea>
+
+                <button type="submit" class="button button-primary">
+                    Submit Idea
+                </button>
+                <p id="formMessage" class="form-message"></p>
+            </form>
+        </div>
+    </section>
+</main>
+
+<!-- LOGIN / REGISTER -->
+<div id="authModal" class="modal hidden">
+    <div class="modal-content">
+        <button type="button" id="closeAuth" class="modal-close">×</button>
+        <h2 id="authHeading">Welcome Back</h2>
+        <p id="authDescription">Login to participate in IdeaSphere.</p>
+
+        <div class="auth-tabs">
+            <button type="button" id="showLogin" class="auth-tab selected">Login</button>
+            <button type="button" id="showRegister" class="auth-tab">Register</button>
+        </div>
+
+        <form id="loginForm">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" type="email" required placeholder="Your email">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" required placeholder="Your password">
+            <button class="button button-primary" type="submit">Login</button>
+        </form>
+
+        <form id="registerForm" class="hidden">
+            <label for="registerName">Full Name</label>
+            <input id="registerName" required placeholder="Your name">
+
+            <label for="registerEmail">Email</label>
+            <input id="registerEmail" type="email" required placeholder="Your email">
+
+            <label for="registerCollege">College Name</label>
+            <input id="registerCollege" required placeholder="Your college name">
+
+            <label for="registerDepartment">Department</label>
+            <input id="registerDepartment" placeholder="Example: CSE">
+
+            <label for="registerPassword">Password</label>
+            <input id="registerPassword" type="password" minlength="10"
+                   maxlength="128" required placeholder="At least 10 characters">
+
+            <button class="button button-primary" type="submit">Create Account</button>
+        </form>
+
+        <p id="authMessage" class="form-message"></p>
+    </div>
+</div>
+
+<footer class="footer">
+    <a href="#home" class="logo">Idea<span>Sphere</span></a>
+    <p>Where Student Ideas Become Innovations.</p>
+    <small>© 2026 IdeaSphere. All Rights Reserved.</small>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
